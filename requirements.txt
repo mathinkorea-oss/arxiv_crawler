@@ -1,0 +1,9 @@
+beautifulsoup4>=4.12
+lxml>=5.0
+requests>=2.31
+pandas>=2.0
+google-genai>=1.0
+pydantic>=2.0
+python-dotenv>=1.0
+streamlit>=1.32
+filelock>=3.13
