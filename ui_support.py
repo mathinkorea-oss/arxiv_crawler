@@ -92,7 +92,7 @@ def friendly_summarize_error(exc: BaseException) -> str:
     if isinstance(exc, sp.SummarizeConfigError):
         return (
             "Gemini API 키가 설정되어 있지 않습니다. "
-            "프로젝트 루트 `.env.local`에 GEMINI_API_KEY를 추가하세요."
+            "로컬은 `.env.local`, Streamlit Cloud는 앱 Secrets에 GEMINI_API_KEY를 설정하세요."
         )
     if isinstance(exc, sp.SummarizeAuthError):
         return "Gemini API 인증에 실패했습니다. API 키를 확인하세요."

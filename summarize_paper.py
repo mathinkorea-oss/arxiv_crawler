@@ -155,6 +155,18 @@ def _find_env_local_path() -> Path | None:
     return None
 
 
+def _load_streamlit_secrets_into_env() -> None:
+    """Streamlit Community Cloud: Advanced settings → Secrets."""
+    try:
+        import streamlit as st
+
+        for key in ("GEMINI_API_KEY", "GEMINI_MODEL"):
+            if key in st.secrets and not (os.environ.get(key) or "").strip():
+                os.environ[key] = str(st.secrets[key]).strip()
+    except Exception:
+        return
+
+
 def _ensure_env_loaded() -> None:
     global _env_loaded
     if _env_loaded:
@@ -163,6 +175,8 @@ def _ensure_env_loaded() -> None:
         env_path = _find_env_local_path()
         if env_path is not None:
             load_dotenv(env_path, override=False)
+    if not os.environ.get("GEMINI_API_KEY"):
+        _load_streamlit_secrets_into_env()
     _env_loaded = True
 
 
@@ -174,8 +188,8 @@ def _get_api_key() -> str:
         location = str(env_hint) if env_hint else "프로젝트 루트의 .env.local"
         raise SummarizeConfigError(
             "GEMINI_API_KEY가 설정되어 있지 않습니다. "
-            f"{location} 파일에 GEMINI_API_KEY=... 를 추가하거나 "
-            "환경 변수 GEMINI_API_KEY를 설정하세요."
+            f"로컬: {location} 또는 환경 변수. "
+            "Streamlit Cloud: 앱 설정 → Secrets에 GEMINI_API_KEY를 추가하세요."
         )
     return key
 
